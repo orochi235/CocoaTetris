@@ -1,0 +1,23 @@
+MILESTONE 1
+	TetrisPiece class (+ viewer)
+
+MILESTONE 2
+	TetrisBoard class (+ viewer)
+    Piece colors
+    More intelligent/correct memory management
+
+MILESTONE 3
+    Movement, clipping and game mechanics
+
+MILESTONE 4
+    Keyboard input
+
+MILESTONE 5
+    OpenGL support
+        ensure it's done in a platform-independent way
+
+MILESTONE 6
+    Basic iOS support
+
+MILESTONE 7
+    Touch input

@@ -1,0 +1,96 @@
+TetrisRule
+	When does it run?
+		State-based/timed, on-demand (e.g. input)
+			Event notifications? Delegates?
+	What does it need to reference?
+		Just the world object, right?
+			How would this affect thread safety?
+	Precedence over other rules?
+	What does it do?
+	
+
+Global objects--maybe a table of entities that the world keeps in a dictionary?
+	
+	
+Rules needed to implement Tetris:
+	- One active piece
+		Spawns at top of screen
+		Randomly generated
+		Replaces itself at end of life
+		Piece's life ends when piece can't drop a row
+	- Gravity
+		Pulls active piece down at constant rate
+	- Clipping
+		Pieces can't intersect
+		Game board has rigidly defined boundaries
+	- Overflow
+		Cell too high is filled? You lose.
+	- Crashed lines
+		Remove themselves when completed
+		Cause board downshift when completed
+	- Difficulty control
+		State variables for piece speed, etc.
+	- Player's role
+		Move left/right
+		Rotate
+		Accelerate downward
+
+Ways of "remixing" Tetris:
+	- Number of cells per tetromino
+	- Color matters
+	- Dimensional tricks
+		- Cylindrical game board (i.e. left and right edges are connected)
+		- Change of movement direction
+		- Change of spawn edge
+	- Criteria for removing large quantities of cells from the board (e.g. variants on crashing lines)
+		- Require square-shaped areas
+		- Color-specific criteria
+		- Build specific shapes out of negative space
+	- Gravity mechanics change
+	- 3d, mahjongg-esque projection
+		- Objective - get to the core?
+	- Power-ups
+	- Pieces have attributes other than color--material, etc
+	- Stuff randomly added to game board
+	- Indestructible pieces
+	- Rotation ability restricted
+
+More algorithmically speaking...
+
+Globals needed:
+	BOARD - Game board
+	ACTIVE - Current piece
+	SCORES - Scores
+	STATE - State variables
+	??? - Some sort of input mechanism
+
+Rules needed:
+	- ACTIVE PIECE (immediately after piece drops--or is merged?)
+		If there is no active piece defined, a new one is generated at the top of the board.
+	- CEILING (right before piece drops)
+		If a cell above the game board's ceiling would be merged into the game board, the game is over.
+	- LATERAL MOVEMENT (triggered by input)
+		A player may move a piece either left or right by one cell. 
+		No frequency restriction (aside from whatever is implemented by the input device).
+	- VERTICAL MOVEMENT (triggered by input)
+		A player may move a piece directly downward by one cell.
+		No frequency restriction (aside from whatever is implemented by the input device).
+	- ROTATION (triggered by input)
+		A player may rotate the active piece 90 degrees cw or ccw.
+		No frequency restriction (aside from whatever is implemented by the input device).
+	- WALL CLIPPING (right before piece would be moved)
+		No part of the active piece or game board may be outside the predefined board space.
+		* Trigger on something like pieceWillMove?
+	- CELL CLIPPING (right before piece would be moved)
+		No part of the active piece may intersect with any filled cell on the game board.
+	- DROP TIMER (regular intervals)
+		At regular intervals, a timer ticks. At each tick, the current piece drops one row.
+		If the current piece is unable to move at the time of the tick, it's merged into the board.
+	- LINE CRASHES (right after piece is merged)
+		If any row of the game board is full, the row is removed and all cells above it are shifted one cell downward
+		* Score updates may happen here
+	- BOARD STATE CHANGES (piece is merged or active piece is moved)
+		* Score updates may happen here
+	- DIFFICULTY THROTTLE (triggered by board state change)
+		If certain criteria are met, state variables may change to make the game faster.
+	
